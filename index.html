@@ -120,7 +120,11 @@
     const thickness = 22;
     const gap = 110; // distance between gates
 
-    const y = isSeed ? gateY : (Math.min(...gates.map(g=>g.y)) - gap);
+    // Seed gates should be spaced out so you actually see a stream.
+    // Also handle the "empty" case safely.
+    const y = isSeed
+      ? gateY
+      : (gates.length ? (Math.min(...gates.map(g=>g.y)) - gap) : gateY);
     const g = {
       y,
       colorIdx,
@@ -129,7 +133,7 @@
       style: (Math.random() < 0.35) ? 'split' : 'full'
     };
     gates.push(g);
-    gateY = y;
+    gateY = isSeed ? (y - gap) : y;
   }
 
   function start() {
