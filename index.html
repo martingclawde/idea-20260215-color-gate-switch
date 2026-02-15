@@ -273,7 +273,11 @@
 
   // input
   canvas.addEventListener('click', () => {
-    if (!running) return;
+    if (!running) {
+      last = null;
+      start();
+      return;
+    }
     cycleColor();
   });
   startBtn.addEventListener('click', () => {
@@ -293,10 +297,16 @@
 
   // mobile tap anywhere to change color while playing
   document.body.addEventListener('touchstart', (e) => {
-    if (!running) return;
     // ignore when tapping buttons
     const t = e.target;
-    if (t && (t.tagName === 'BUTTON')) return;
+    if (t && (t.tagName === 'BUTTON' || t.closest && t.closest('header'))) return;
+
+    if (!running) {
+      last = null;
+      start();
+      return;
+    }
+
     cycleColor();
   }, { passive: true });
 
